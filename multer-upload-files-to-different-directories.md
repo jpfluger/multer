@@ -28,7 +28,7 @@ app.post('/files2', mwMulter2, function(req, res) {
 
 As [james147 points out](https://github.com/expressjs/multer/issues/59), as of Multer version 0.1.4, putting an instance of Multer in the global scope of all processing creates a security risk. Multer will run for any post/put request, even when the developer intends for the targeted page to not receive files. This can be exploited by a hacker to create a Denial of Service attack.
 
-By placing the Multer instance on the exact route, the developer can better prevent this attack.
+By placing the Multer instance on the exact route, the developer can narrow the scope of the attack to the route. 
 
 ### Using the Source Code
 
