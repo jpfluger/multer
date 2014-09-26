@@ -48,19 +48,18 @@ Run the server
 
 Open two browser windows (or tabs) with the following urls:
 
-1. [http://localhost/8080/files1](http://localhost/8080/files1)
-2. [http://localhost/8080/files2](http://localhost/8080/files2)
-
-Uploaded files can be inspected in the `uploads1/` and `uploads2/` directories.
+1. [http://localhost/8080/files1](http://localhost/8080/files1): files are uploaded to the uploads1/ directory
+2. [http://localhost/8080/files2](http://localhost/8080/files2): files are uploaded to the uploads2/ directory
+3. [http://localhost/8080/filesFail](http://localhost/8080/filesFail): the upload cannot be parsed. This is good. No security leak.
 
 ### Source Code (Full Example)
 
 ```js
-var express    = require('express');
+var express    = require('express'); 		// call express
 var multer  = require('multer');
 var util = require('util');
 
-var port = process.env.PORT || 8080;
+var port = process.env.PORT || 8080; 		// set our port
 
 var app = express();
 
@@ -138,6 +137,30 @@ app.post('/files2', mwMulter2, function(req, res) {
 		}
 
 		res.json({ message: 'Finished! Uploaded ' + filesUploaded + ' files.  Route is /files2' });
+	});
+
+app.get('/filesFail', function(req, res) {
+		console.log('IN GET /filesFail');
+		res.writeHead(200, { Connection: 'close' });
+		res.end('<html><head></head><body>\
+		               <form method="POST" enctype="multipart/form-data">\
+		                <input type="text" name="textfield1"><br />\
+		                <input type="file" multiple name="file1"><br />\
+		                <input type="submit">\
+		              </form>\
+		            </body></html>');
+	});
+
+app.post('/filesFail', function(req, res) {
+
+		console.log('IN POST (/filesFail)');
+		console.log('req.body = ' + req.body); // this is undefined b/c a body-parser has not been specified
+		console.log('req.files = ' + req.files);
+
+		if (req.body === undefined && req.files === undefined )
+			res.json({ message: '/filesFail was NOT PARSED... no security leak' });
+		else 
+			res.json({ message: '/filesFail was parsed.... security leak' });
 	});
 
 app.listen(port);
