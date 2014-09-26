@@ -30,17 +30,37 @@ As [james147 points out](https://github.com/expressjs/multer/issues/59), as of M
 
 By placing the Multer instance on the exact route, the developer can better prevent this attack.
 
+### Using the Source Code
+
+Make a test directory and place the full source below in a server.js file. 
+
+Then npm install the following libaries:
+
+```bash
+$ npm install express
+$ npm install body
+$ npm install express
+```
+
+Run the server
+
+`$ node server2`
+
+Open two browser windows (or tabs) with the following urls:
+
+1. [http://localhost/8080/files1](http://localhost/8080/files1)
+2. [http://localhost/8080/files2](http://localhost/8080/files2)
+
+Uploaded files can be inspected in the `uploads1/` and `uploads2/` directories.
+
 ### Source Code (Full Example)
 
 ```js
-var express    = require('express'); 		// call express
-var app        = express(); 				// define our app using express
-var bodyParser = require('body-parser');
-
-var port = process.env.PORT || 8080; 		// set our port
-
+var express    = require('express');
 var multer  = require('multer');
 var util = require('util');
+
+var port = process.env.PORT || 8080;
 
 var app = express();
 
